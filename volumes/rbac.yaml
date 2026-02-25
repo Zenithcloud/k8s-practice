@@ -1,0 +1,61 @@
+apiVersion: rbac.authriation.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+
+
+
+#Cluster-Role
+  apiVersion: rbac.authrization.k8s.io/v1
+  kind: ClusterRole
+  metadata:
+    name: secret-reader
+  rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "watch", "list"]
+
+
+#Role-Binding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+  namespace: default
+subjects:
+- kind: User #User,Group,ServiceAccount
+  name: jane
+  apiGroup: rbac.authoriation.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+
+#Cluster-Role-binding
+apiVersion: rbac.authorizzation.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: read-secrets-global
+subjects:
+- kind: Group
+  name: manager
+  apiGroup: rbac.authriation.k8s.io
+roleref:
+  kind: ClusterRole
+  name: secret-reader
+  apiGroup: rbac.authorization.k8s.io
+
+
+
+kubectl auth can-i get pod --as jack
+
+
+kubectl auth can-i get pod --as jack -n default
+
+
+https://github.com/devopsproin/certified-kubernetes-administrator/tree/main/RBAC
