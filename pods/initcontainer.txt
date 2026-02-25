@@ -1,0 +1,5 @@
+To check file created by init container
+
+kubectl exec -it initcontainer -- bash
+
+kubectl describe pod initcontainer
